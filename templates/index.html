@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student API Interface</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 30px 15px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: auto;
+        }
+
+        header {
+            background: #142d4e;
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+        }
+
+        header p {
+            color: #dbeafe;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+        }
+
+        h2 {
+            color: #142d4e;
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #2563eb;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .result {
+            background: #f8fafc;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 40px;
+            overflow-wrap: anywhere;
+        }
+
+        .result p {
+            margin: 10px 0;
+        }
+
+        .result strong {
+            color: #142d4e;
+        }
+
+        .subject-item {
+            background: white;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .subject-item p {
+            margin: 8px 0;
+        }
+
+        .status {
+            color: #64748b;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+            padding: 15px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px 10px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            header {
+                padding: 25px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Student API Interface</h1>
+        <p>Flask API Integration Using JavaScript Fetch()</p>
+    </header>
+
+
+    <!-- STUDENT INFORMATION -->
+    <div class="card">
+
+        <h2>Student Information</h2>
+
+        <p>
+            Click the button below to retrieve student
+            information from the API.
+        </p>
+
+        <button onclick="loadStudent()">
+            Load Student Information
+        </button>
+
+        <div class="result" id="result">
+            <p class="status">
+                Student information will appear here.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- GREETING API -->
+    <div class="card">
+
+        <h2>Greeting API</h2>
+
+        <p>Enter your first name to receive a greeting.</p>
+
+        <input
+            type="text"
+            id="nameInput"
+            placeholder="Enter your first name"
+        >
+
+        <button onclick="sayHello()">
+            Say Hello
+        </button>
+
+        <div class="result" id="greeting">
+            <p class="status">
+                Your greeting will appear here.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOM API -->
+    <div class="card">
+
+        <h2>Custom API - Subjects</h2>
+
+        <p>
+            Retrieve your subjects and their assigned professors
+            from the custom Flask API.
+        </p>
+
+        <button onclick="loadSubjects()">
+            Load Subjects
+        </button>
+
+        <div class="result" id="subjects">
+            <p class="status">
+                Subject information will appear here.
+            </p>
+        </div>
+
+    </div>
+
+
+    <footer>
+        Laboratory Activity 6 | Flask API Integration
+        <br>
+        Student API | Greeting API | Custom Subjects API
+    </footer>
+
+</div>
+
+
+<script>
+
+    // LOAD STUDENT INFORMATION
+    function loadStudent() {
+
+        const result = document.getElementById('result');
+
+        result.innerHTML = '<p>Loading student information...</p>';
+
+        fetch('/student')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to retrieve student data.');
+            }
+
+            return response.json();
+        })
+        .then(data => {
+
+            result.innerHTML = `
+                <p><strong>Student ID:</strong> ${data.student_id}</p>
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Program:</strong> ${data.program}</p>
+                <p><strong>Year:</strong> ${data.year}</p>
+                <p><strong>Section:</strong> ${data.section}</p>
+            `;
+
+        })
+        .catch(error => {
+
+            result.innerText =
+                'Unable to retrieve student information.';
+
+            console.error(error);
+
+        });
+
+    }
+
+
+    // GREETING API
+    function sayHello() {
+
+        const name = document.getElementById('nameInput').value.trim();
+
+        const greeting = document.getElementById('greeting');
+
+        if (!name) {
+
+            greeting.innerText =
+                'Please enter your first name.';
+
+            return;
+        }
+
+        greeting.innerText = 'Loading greeting...';
+
+        fetch('/hello?name=' + encodeURIComponent(name))
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error('Failed to retrieve greeting.');
+            }
+
+            return response.json();
+
+        })
+        .then(data => {
+
+            greeting.innerText = data.message;
+
+        })
+        .catch(error => {
+
+            greeting.innerText =
+                'Unable to retrieve greeting.';
+
+            console.error(error);
+
+        });
+
+    }
+
+
+    // CUSTOM API - SUBJECTS
+    function loadSubjects() {
+
+        const subjectsDiv = document.getElementById('subjects');
+
+        subjectsDiv.innerHTML = '<p>Loading subjects...</p>';
+
+        fetch('/subjects')
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error('Failed to retrieve subjects.');
+            }
+
+            return response.json();
+
+        })
+        .then(data => {
+
+            if (!Array.isArray(data.subjects)) {
+                throw new Error('Invalid subjects data.');
+            }
+
+            if (data.subjects.length === 0) {
+                subjectsDiv.innerText = 'No subjects available.';
+                return;
+            }
+
+            let output = '<h3>Available Subjects</h3>';
+
+            data.subjects.forEach(subject => {
+
+                output += `
+                    <div class="subject-item">
+                        <p><strong>Subject Code:</strong> ${subject.code}</p>
+                        <p><strong>Subject Name:</strong> ${subject.name}</p>
+                        <p><strong>Professor:</strong> ${subject.professor}</p>
+                    </div>
+                `;
+
+            });
+
+            subjectsDiv.innerHTML = output;
+
+        })
+        .catch(error => {
+
+            subjectsDiv.innerText =
+                'Unable to retrieve subjects.';
+
+            console.error(error);
+
+        });
+
+    }
+
+</script>
+
+</body>
+</html>

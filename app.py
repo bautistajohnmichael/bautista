@@ -1,67 +1,61 @@
-from flask import Flask, jsonify, request
+
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
 
+# HOME PAGE
 @app.route('/')
 def home():
-    return "Welcome to my first API!"
+    return render_template('index.html')
 
 
-@app.route('/student')
+# STUDENT INFORMATION API
+@app.route('/student', methods=['GET'])
 def get_student():
     return jsonify({
-        "student_id": "24-00286",
-        "name": "Necole Andrea Aloro",
+        "student_id": "2026-00123",
+        "name": "John Michael Bautista",
         "program": "BSIT",
         "year": 3,
         "section": "A"
     })
 
 
-@app.route('/hello')
+# GREETING API
+@app.route('/hello', methods=['GET'])
 def say_hello():
-    name = request.args.get('name', 'Necole Andrea')
+    name = request.args.get('name', 'Student')
+
     return jsonify({
         "message": f"Hello, {name}!"
     })
 
 
-@app.route('/course')
-def say_course():
+# CUSTOM API - SUBJECTS
+@app.route('/subjects', methods=['GET'])
+def get_subjects():
     return jsonify({
-        "course_code": "IT3120",
-        "course_title": "System Integration",
-        "instructor": "Dr. Rene Arduo",
-        "semester": "First Semester",
-        "academic_year": "AY 2026-2027"
+        "subjects": [
+            {
+                "code": "IT3120",
+                "name": "System Integration",
+                "professor": "Dr. Rene Arduo"
+            },
+            {
+                "code": "IT3122",
+                "name": "Quantitative",
+                "professor": "Dr. Rene Arduo"
+            },
+            {
+                "code": "ITPE3",
+                "name": "Web Systems Technologies",
+                "professor": "Dr. Weena Bulnes"
+            }
+        ]
     })
 
 
-@app.route('/greet')
-def greet():
-    name = request.args.get('name', 'Necole Andrea Aloro')
-    program = request.args.get('program', 'BSIT')
-    year = request.args.get('year', '3')
-    section = request.args.get('section', 'A')
-
-    return jsonify({
-        "message": f"Hello {name} from {program} {year} {section}!"
-    })
-
-@app.route('/profile')
-def get_profile():
-    return jsonify({
-        "student_id": "24-00286",
-        "name": "Necole Andrea Aloro",
-        "program": "BSIT",
-        "year": 3,
-        "section": "A",
-        "gmail": "aloronecoleandrea@isufst.edu.ph",
-        "skills": "mobile gaming, editing"
-    })
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
+# RUN APPLICATION
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
