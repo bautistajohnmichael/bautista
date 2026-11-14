@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student API Interface</title>
+    <title>Student API Interface - Laboratory Activity 8</title>
 
     <style>
         * {
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 750px;
+            max-width: 850px;
             margin: auto;
         }
 
@@ -40,7 +40,7 @@
 
         header p {
             color: #dbeafe;
-            margin: 0;
+            margin: 7px 0;
         }
 
         .card {
@@ -68,11 +68,23 @@
             border-radius: 7px;
             cursor: pointer;
             font-size: 14px;
-            margin-top: 10px;
+            margin: 5px 3px;
         }
 
         button:hover {
             background: #1d4ed8;
+        }
+
+        .delete-button {
+            background: #dc2626;
+        }
+
+        .delete-button:hover {
+            background: #b91c1c;
+        }
+
+        .secondary-button {
+            background: #475569;
         }
 
         input {
@@ -118,6 +130,20 @@
             color: #64748b;
         }
 
+        .success {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #dc2626;
+        }
+
+        .form-note {
+            color: #64748b;
+            font-size: 13px;
+        }
+
         footer {
             text-align: center;
             color: #64748b;
@@ -145,9 +171,11 @@
 
 <div class="container">
 
+    <!-- HEADER -->
     <header>
         <h1>Student API Interface</h1>
         <p>Flask API Integration Using JavaScript Fetch()</p>
+        <p>Laboratory Activity 8 - CRUD and Classmate API</p>
     </header>
 
 
@@ -156,19 +184,14 @@
 
         <h2>Student Information</h2>
 
-        <p>
-            Click the button below to retrieve student
-            information from the API.
-        </p>
+        <p>Retrieve student information from the Flask API.</p>
 
         <button onclick="loadStudent()">
             Load Student Information
         </button>
 
         <div class="result" id="result">
-            <p class="status">
-                Student information will appear here.
-            </p>
+            <p class="status">Student information will appear here.</p>
         </div>
 
     </div>
@@ -192,21 +215,19 @@
         </button>
 
         <div class="result" id="greeting">
-            <p class="status">
-                Your greeting will appear here.
-            </p>
+            <p class="status">Your greeting will appear here.</p>
         </div>
 
     </div>
 
 
-    <!-- CUSTOM API -->
+    <!-- SUBJECTS API -->
     <div class="card">
 
         <h2>Custom API - Subjects</h2>
 
         <p>
-            Retrieve your subjects and their assigned professors
+            Retrieve your subjects and assigned professors
             from the custom Flask API.
         </p>
 
@@ -215,18 +236,185 @@
         </button>
 
         <div class="result" id="subjects">
+            <p class="status">Subject information will appear here.</p>
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVITY 7: ALL DATABASE RECORDS -->
+    <div class="card">
+
+        <h2>Students from Database</h2>
+
+        <p>Retrieve all student records stored in SQLite.</p>
+
+        <button onclick="loadStudents()">
+            Load Students
+        </button>
+
+        <div class="result" id="studentList">
+            <p class="status">Database records will appear here.</p>
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVITY 7: FILTER BY PROGRAM -->
+    <div class="card">
+
+        <h2>Filter Students by Program</h2>
+
+        <p>Search students by their academic program.</p>
+
+        <input
+            type="text"
+            id="programInput"
+            placeholder="Enter program (e.g. BSIT)"
+        >
+
+        <button onclick="loadStudentsByProgram()">
+            Search Students
+        </button>
+
+        <div class="result" id="programResults">
+            <p class="status">Filtered records will appear here.</p>
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVITY 8: CRUD FORM -->
+    <div class="card">
+
+        <h2>Student CRUD Management</h2>
+
+        <p>
+            Create, read, update, and delete your own
+            student records.
+        </p>
+
+        <p class="form-note">
+            Fill in all fields. When editing, the Add Student
+            button changes to Update Student.
+        </p>
+
+        <input type="hidden" id="editId">
+
+        <input
+            type="text"
+            id="crudStudentId"
+            placeholder="Student ID"
+        >
+
+        <input
+            type="text"
+            id="crudName"
+            placeholder="Student Name"
+        >
+
+        <input
+            type="text"
+            id="crudProgram"
+            placeholder="Program (e.g. BSIT)"
+        >
+
+        <input
+            type="number"
+            id="crudYear"
+            min="1"
+            step="1"
+            placeholder="Year Level"
+        >
+
+        <input
+            type="text"
+            id="crudSection"
+            placeholder="Section (e.g. A)"
+        >
+
+        <button onclick="saveStudent()" id="saveButton">
+            Add Student
+        </button>
+
+        <button
+            onclick="clearForm()"
+            class="secondary-button"
+        >
+            Clear Form
+        </button>
+
+        <div class="result" id="crudMessage">
+            <p class="status">CRUD messages will appear here.</p>
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVITY 8: MY RECORDS -->
+    <div class="card">
+
+        <h2>My Records</h2>
+
+        <p>
+            <strong>Source:</strong> My own SQLite database.
+        </p>
+
+        <button onclick="loadMyRecords()">
+            Refresh My Records
+        </button>
+
+        <div class="result" id="myRecords">
+            <p class="status">Your records will appear here.</p>
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVITY 8: CLASSMATE RECORDS -->
+    <div class="card">
+
+        <h2>Classmate's Records</h2>
+
+        <p>
+            <strong>Source:</strong> Another student's deployed API.
+        </p>
+
+        <p>
+            Enter your classmate's public Render API URL.
+            Remote records are read-only.
+        </p>
+
+        <input
+            type="url"
+            id="classmateURL"
+            placeholder="https://classmate-app.onrender.com/api/students"
+        >
+
+        <button onclick="loadClassmateRecords()">
+            Retrieve Classmate's Records
+        </button>
+
+        <div class="result" id="classmateRecords">
             <p class="status">
-                Subject information will appear here.
+                Classmate's records will appear here.
+            </p>
+        </div>
+
+        <div class="result" id="remoteDetails">
+            <p class="status">
+                Select View Details to see a complete remote record.
             </p>
         </div>
 
     </div>
 
 
+    <!-- FOOTER -->
     <footer>
-        Laboratory Activity 6 | Flask API Integration
+        Laboratory Activity 8
         <br>
-        Student API | Greeting API | Custom Subjects API
+        Flask API | SQLite Database | CRUD | Classmate API
     </footer>
 
 </div>
@@ -234,143 +422,684 @@
 
 <script>
 
-    // LOAD STUDENT INFORMATION
-    function loadStudent() {
+// ==========================================
+// HELPER FUNCTIONS
+// ==========================================
 
-        const result = document.getElementById('result');
+// Escape values before displaying them in HTML.
+function escapeHTML(value) {
+    return String(value ?? '').replace(/[&<>"']/g, function(char) {
+        return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[char];
+    });
+}
 
-        result.innerHTML = '<p>Loading student information...</p>';
 
-        fetch('/student')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to retrieve student data.');
-            }
+// ==========================================
+// STUDENT INFORMATION API
+// ==========================================
 
-            return response.json();
-        })
-        .then(data => {
+async function loadStudent() {
 
-            result.innerHTML = `
-                <p><strong>Student ID:</strong> ${data.student_id}</p>
-                <p><strong>Name:</strong> ${data.name}</p>
-                <p><strong>Program:</strong> ${data.program}</p>
-                <p><strong>Year:</strong> ${data.year}</p>
-                <p><strong>Section:</strong> ${data.section}</p>
-            `;
+    const result = document.getElementById('result');
 
-        })
-        .catch(error => {
+    result.innerHTML = '<p>Loading student information...</p>';
 
-            result.innerText =
-                'Unable to retrieve student information.';
+    try {
+        const response = await fetch('/student');
+        const data = await response.json();
 
-            console.error(error);
+        if (!response.ok) {
+            throw new Error('Failed to retrieve student information.');
+        }
 
-        });
+        result.innerHTML = `
+            <p><strong>Student ID:</strong> ${escapeHTML(data.student_id)}</p>
+            <p><strong>Name:</strong> ${escapeHTML(data.name)}</p>
+            <p><strong>Program:</strong> ${escapeHTML(data.program)}</p>
+            <p><strong>Year:</strong> ${escapeHTML(data.year)}</p>
+            <p><strong>Section:</strong> ${escapeHTML(data.section)}</p>
+        `;
 
+    } catch (error) {
+        result.innerHTML =
+            '<p class="error">Unable to retrieve student information.</p>';
+
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// GREETING API
+// ==========================================
+
+async function sayHello() {
+
+    const name = document.getElementById('nameInput').value.trim();
+    const greeting = document.getElementById('greeting');
+
+    if (!name) {
+        greeting.innerHTML =
+            '<p class="error">Please enter your first name.</p>';
+        return;
     }
 
+    greeting.innerHTML = '<p>Loading greeting...</p>';
 
-    // GREETING API
-    function sayHello() {
+    try {
+        const response = await fetch(
+            '/hello?name=' + encodeURIComponent(name)
+        );
 
-        const name = document.getElementById('nameInput').value.trim();
+        const data = await response.json();
 
-        const greeting = document.getElementById('greeting');
+        if (!response.ok) {
+            throw new Error('Failed to retrieve greeting.');
+        }
 
-        if (!name) {
+        greeting.innerHTML =
+            `<p class="success">${escapeHTML(data.message)}</p>`;
 
-            greeting.innerText =
-                'Please enter your first name.';
+    } catch (error) {
+        greeting.innerHTML =
+            '<p class="error">Unable to retrieve greeting.</p>';
 
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// SUBJECTS API
+// ==========================================
+
+async function loadSubjects() {
+
+    const output = document.getElementById('subjects');
+
+    output.innerHTML = '<p>Loading subjects...</p>';
+
+    try {
+        const response = await fetch('/subjects');
+        const data = await response.json();
+
+        if (!response.ok || !Array.isArray(data.subjects)) {
+            throw new Error('Invalid subjects response.');
+        }
+
+        if (data.subjects.length === 0) {
+            output.innerHTML = '<p>No subjects available.</p>';
             return;
         }
 
-        greeting.innerText = 'Loading greeting...';
+        let html = '<h3>Available Subjects</h3>';
 
-        fetch('/hello?name=' + encodeURIComponent(name))
-        .then(response => {
-
-            if (!response.ok) {
-                throw new Error('Failed to retrieve greeting.');
-            }
-
-            return response.json();
-
-        })
-        .then(data => {
-
-            greeting.innerText = data.message;
-
-        })
-        .catch(error => {
-
-            greeting.innerText =
-                'Unable to retrieve greeting.';
-
-            console.error(error);
-
+        data.subjects.forEach(subject => {
+            html += `
+                <div class="subject-item">
+                    <p><strong>Subject Code:</strong> ${escapeHTML(subject.code)}</p>
+                    <p><strong>Subject Name:</strong> ${escapeHTML(subject.name)}</p>
+                    <p><strong>Professor:</strong> ${escapeHTML(subject.professor)}</p>
+                </div>
+            `;
         });
 
+        output.innerHTML = html;
+
+    } catch (error) {
+        output.innerHTML =
+            '<p class="error">Unable to retrieve subjects.</p>';
+
+        console.error(error);
     }
+}
 
 
-    // CUSTOM API - SUBJECTS
-    function loadSubjects() {
+// ==========================================
+// ACTIVITY 7 - READ ALL DATABASE STUDENTS
+// ==========================================
 
-        const subjectsDiv = document.getElementById('subjects');
+async function loadStudents() {
 
-        subjectsDiv.innerHTML = '<p>Loading subjects...</p>';
+    const output = document.getElementById('studentList');
 
-        fetch('/subjects')
-        .then(response => {
+    output.innerHTML = '<p>Loading database records...</p>';
 
-            if (!response.ok) {
-                throw new Error('Failed to retrieve subjects.');
-            }
+    try {
+        const response = await fetch('/students');
+        const data = await response.json();
 
-            return response.json();
+        if (!response.ok || !Array.isArray(data)) {
+            throw new Error('Unable to retrieve database records.');
+        }
 
-        })
-        .then(data => {
+        if (data.length === 0) {
+            output.innerHTML = '<p>No student records found.</p>';
+            return;
+        }
 
-            if (!Array.isArray(data.subjects)) {
-                throw new Error('Invalid subjects data.');
-            }
+        let html = `
+            <h3>Student Database Records</h3>
+            <p class="success">Total Students: ${data.length}</p>
+        `;
 
-            if (data.subjects.length === 0) {
-                subjectsDiv.innerText = 'No subjects available.';
-                return;
-            }
-
-            let output = '<h3>Available Subjects</h3>';
-
-            data.subjects.forEach(subject => {
-
-                output += `
-                    <div class="subject-item">
-                        <p><strong>Subject Code:</strong> ${subject.code}</p>
-                        <p><strong>Subject Name:</strong> ${subject.name}</p>
-                        <p><strong>Professor:</strong> ${subject.professor}</p>
-                    </div>
-                `;
-
-            });
-
-            subjectsDiv.innerHTML = output;
-
-        })
-        .catch(error => {
-
-            subjectsDiv.innerText =
-                'Unable to retrieve subjects.';
-
-            console.error(error);
-
+        data.forEach(student => {
+            html += `
+                <div class="subject-item">
+                    <p><strong>Database ID:</strong> ${escapeHTML(student.id)}</p>
+                    <p><strong>Student ID:</strong> ${escapeHTML(student.student_id)}</p>
+                    <p><strong>Name:</strong> ${escapeHTML(student.name)}</p>
+                    <p><strong>Program:</strong> ${escapeHTML(student.program)}</p>
+                    <p><strong>Year:</strong> ${escapeHTML(student.year)}</p>
+                    <p><strong>Section:</strong> ${escapeHTML(student.section)}</p>
+                </div>
+            `;
         });
 
+        output.innerHTML = html;
+
+    } catch (error) {
+        output.innerHTML =
+            '<p class="error">Unable to load database records.</p>';
+
+        console.error(error);
     }
+}
+
+
+// ==========================================
+// ACTIVITY 7 - FILTER BY PROGRAM
+// ==========================================
+
+async function loadStudentsByProgram() {
+
+    const program = document.getElementById('programInput').value.trim();
+    const output = document.getElementById('programResults');
+
+    if (!program) {
+        output.innerHTML =
+            '<p class="error">Please enter a program.</p>';
+        return;
+    }
+
+    output.innerHTML = '<p>Searching student records...</p>';
+
+    try {
+        const response = await fetch(
+            '/students/program/' + encodeURIComponent(program)
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !Array.isArray(data)) {
+            throw new Error('Unable to filter student records.');
+        }
+
+        if (data.length === 0) {
+            output.innerHTML =
+                '<p>No matching students found.</p>';
+            return;
+        }
+
+        let html = `
+            <h3>Filtered Student Records</h3>
+            <p class="success">
+                Program: ${escapeHTML(program.toUpperCase())}
+                | Results: ${data.length}
+            </p>
+        `;
+
+        data.forEach(student => {
+            html += `
+                <div class="subject-item">
+                    <p><strong>Student ID:</strong> ${escapeHTML(student.student_id)}</p>
+                    <p><strong>Name:</strong> ${escapeHTML(student.name)}</p>
+                    <p><strong>Program:</strong> ${escapeHTML(student.program)}</p>
+                    <p><strong>Year:</strong> ${escapeHTML(student.year)}</p>
+                    <p><strong>Section:</strong> ${escapeHTML(student.section)}</p>
+                </div>
+            `;
+        });
+
+        output.innerHTML = html;
+
+    } catch (error) {
+        output.innerHTML =
+            '<p class="error">Unable to filter student records.</p>';
+
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// ACTIVITY 8 - CRUD MESSAGE
+// ==========================================
+
+function showCrudMessage(message, isError = false) {
+
+    const output = document.getElementById('crudMessage');
+
+    output.innerHTML = `
+        <p class="${isError ? 'error' : 'success'}">
+            ${escapeHTML(message)}
+        </p>
+    `;
+}
+
+
+// ==========================================
+// ACTIVITY 8 - CLEAR FORM
+// ==========================================
+
+function clearForm(showMessage = true) {
+
+    document.getElementById('editId').value = '';
+    document.getElementById('crudStudentId').value = '';
+    document.getElementById('crudName').value = '';
+    document.getElementById('crudProgram').value = '';
+    document.getElementById('crudYear').value = '';
+    document.getElementById('crudSection').value = '';
+
+    document.getElementById('saveButton').innerText = 'Add Student';
+
+    if (showMessage) {
+        showCrudMessage('Form cleared.');
+    }
+}
+
+
+// ==========================================
+// GET FORM DATA
+// ==========================================
+
+function getStudentFormData() {
+
+    return {
+        student_id: document.getElementById('crudStudentId').value.trim(),
+        name: document.getElementById('crudName').value.trim(),
+        program: document.getElementById('crudProgram').value.trim(),
+        year: document.getElementById('crudYear').value.trim(),
+        section: document.getElementById('crudSection').value.trim()
+    };
+}
+
+
+// ==========================================
+// CREATE AND UPDATE STUDENT
+// ==========================================
+
+async function saveStudent() {
+
+    const id = document.getElementById('editId').value;
+    const studentData = getStudentFormData();
+
+    if (
+        !studentData.student_id ||
+        !studentData.name ||
+        !studentData.program ||
+        !studentData.year ||
+        !studentData.section
+    ) {
+        showCrudMessage('Please complete all fields.', true);
+        return;
+    }
+
+    const year = Number(studentData.year);
+
+    if (!Number.isInteger(year) || year < 1) {
+        showCrudMessage('Enter a valid year level.', true);
+        return;
+    }
+
+    const isEditing = Boolean(id);
+
+    const url = isEditing
+        ? `/api/students/${encodeURIComponent(id)}`
+        : '/api/students';
+
+    const method = isEditing ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(studentData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Unable to save student.');
+        }
+
+        clearForm(false);
+
+        showCrudMessage(
+            isEditing
+                ? 'Student updated successfully!'
+                : `Student added successfully! Database ID: ${data.id}`
+        );
+
+        await loadMyRecords();
+        await loadStudents();
+
+    } catch (error) {
+        showCrudMessage(error.message, true);
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// READ - MY OWN DATABASE RECORDS
+// ==========================================
+
+async function loadMyRecords() {
+
+    const output = document.getElementById('myRecords');
+
+    output.innerHTML = '<p>Loading your records...</p>';
+
+    try {
+        const response = await fetch('/api/students');
+        const students = await response.json();
+
+        if (!response.ok || !Array.isArray(students)) {
+            throw new Error('Unable to retrieve your records.');
+        }
+
+        if (students.length === 0) {
+            output.innerHTML = '<p>No records found.</p>';
+            return;
+        }
+
+        let html = `
+            <h3>My Database Records</h3>
+            <p class="success">Total Records: ${students.length}</p>
+            <p><strong>Source:</strong> My SQLite Database</p>
+        `;
+
+        students.forEach(student => {
+
+            html += `
+                <div class="subject-item">
+
+                    <p><strong>Database ID:</strong> ${escapeHTML(student.id)}</p>
+                    <p><strong>Student ID:</strong> ${escapeHTML(student.student_id)}</p>
+                    <p><strong>Name:</strong> ${escapeHTML(student.name)}</p>
+                    <p><strong>Program:</strong> ${escapeHTML(student.program)}</p>
+                    <p><strong>Year:</strong> ${escapeHTML(student.year)}</p>
+                    <p><strong>Section:</strong> ${escapeHTML(student.section)}</p>
+
+                    <button onclick="editStudent(${Number(student.id)})">
+                        Edit
+                    </button>
+
+                    <button
+                        class="delete-button"
+                        onclick="deleteStudent(${Number(student.id)})"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+            `;
+        });
+
+        output.innerHTML = html;
+
+    } catch (error) {
+        output.innerHTML =
+            '<p class="error">Unable to retrieve your records.</p>';
+
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// UPDATE - LOAD STUDENT INTO FORM
+// ==========================================
+
+async function editStudent(id) {
+
+    try {
+        const response = await fetch(`/api/students/${id}`);
+        const student = await response.json();
+
+        if (!response.ok) {
+            throw new Error(student.error || 'Student not found.');
+        }
+
+        document.getElementById('editId').value = student.id;
+        document.getElementById('crudStudentId').value = student.student_id;
+        document.getElementById('crudName').value = student.name;
+        document.getElementById('crudProgram').value = student.program;
+        document.getElementById('crudYear').value = student.year;
+        document.getElementById('crudSection').value = student.section;
+
+        document.getElementById('saveButton').innerText = 'Update Student';
+
+        showCrudMessage('Editing database record ID: ' + student.id);
+
+        document.getElementById('crudStudentId').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+
+    } catch (error) {
+        showCrudMessage(error.message, true);
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// DELETE - REMOVE STUDENT
+// ==========================================
+
+async function deleteStudent(id) {
+
+    const confirmed = confirm(
+        'Are you sure you want to delete this practice student record?'
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/students/${id}`, {
+            method: 'DELETE'
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Unable to delete student.');
+        }
+
+        clearForm(false);
+
+        showCrudMessage('Student deleted successfully!');
+
+        await loadMyRecords();
+        await loadStudents();
+
+    } catch (error) {
+        showCrudMessage(error.message, true);
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// ACTIVITY 8 - CLASSMATE'S RECORDS
+// READ ONLY
+// ==========================================
+
+window.remoteStudents = [];
+
+
+async function loadClassmateRecords() {
+
+    const url = document.getElementById('classmateURL').value.trim();
+    const output = document.getElementById('classmateRecords');
+
+    window.remoteStudents = [];
+
+    document.getElementById('remoteDetails').innerHTML =
+        '<p class="status">Select View Details to see a complete remote record.</p>';
+
+    if (!url) {
+        output.innerHTML =
+            '<p class="error">Please enter your classmate API URL.</p>';
+        return;
+    }
+
+    let parsedURL;
+
+    try {
+        parsedURL = new URL(url);
+
+        if (
+            parsedURL.protocol !== 'https:' ||
+            !parsedURL.pathname.endsWith('/api/students') ||
+            parsedURL.username ||
+            parsedURL.password
+        ) {
+            throw new Error(
+                'Use an HTTPS API URL ending in /api/students.'
+            );
+        }
+
+    } catch (error) {
+        output.innerHTML =
+            `<p class="error">${escapeHTML(error.message)}</p>`;
+        return;
+    }
+
+    output.innerHTML = '<p>Retrieving classmate records...</p>';
+
+    try {
+        const response = await fetch(parsedURL.href);
+
+        if (!response.ok) {
+            throw new Error(
+                'Classmate API returned HTTP ' + response.status
+            );
+        }
+
+        const students = await response.json();
+
+        if (!Array.isArray(students)) {
+            throw new Error('The API did not return a student list.');
+        }
+
+        window.remoteStudents = students;
+
+        if (students.length === 0) {
+            output.innerHTML = '<p>No classmate records found.</p>';
+            return;
+        }
+
+        let html = `
+            <h3>Classmate's Records</h3>
+            <p class="success">Remote Records: ${students.length}</p>
+            <p><strong>Source:</strong> Classmate's Render API</p>
+        `;
+
+        students.forEach((student, index) => {
+
+            html += `
+                <div class="subject-item">
+
+                    <p><strong>Source:</strong> Classmate's API</p>
+                    <p><strong>Student ID:</strong> ${escapeHTML(student.student_id)}</p>
+                    <p><strong>Name:</strong> ${escapeHTML(student.name)}</p>
+                    <p><strong>Program:</strong> ${escapeHTML(student.program)}</p>
+
+                    <button onclick="viewRemoteDetails(${index})">
+                        View Details
+                    </button>
+
+                </div>
+            `;
+        });
+
+        output.innerHTML = html;
+
+    } catch (error) {
+
+        output.innerHTML = `
+            <p class="error">
+                Unable to retrieve classmate records.
+            </p>
+            <p>${escapeHTML(error.message)}</p>
+            <p class="status">
+                If this is a CORS error, the classmate's Flask API
+                must allow requests from your website. Ask your teacher
+                about the server-side proxy alternative.
+            </p>
+        `;
+
+        console.error(error);
+    }
+}
+
+
+// ==========================================
+// VIEW ONE CLASSMATE RECORD
+// READ ONLY
+// ==========================================
+
+function viewRemoteDetails(index) {
+
+    const student = window.remoteStudents[index];
+
+    if (!student) {
+        return;
+    }
+
+    const output = document.getElementById('remoteDetails');
+
+    output.innerHTML = `
+        <h3>Classmate's Student Details</h3>
+
+        <p><strong>Source:</strong> Classmate's API (Read Only)</p>
+
+        <p><strong>Database ID:</strong> ${escapeHTML(student.id ?? 'Not provided')}</p>
+
+        <p><strong>Student ID:</strong> ${escapeHTML(student.student_id ?? 'Not provided')}</p>
+
+        <p><strong>Name:</strong> ${escapeHTML(student.name ?? 'Not provided')}</p>
+
+        <p><strong>Program:</strong> ${escapeHTML(student.program ?? 'Not provided')}</p>
+
+        <p><strong>Year:</strong> ${escapeHTML(student.year ?? 'Not provided')}</p>
+
+        <p><strong>Section:</strong> ${escapeHTML(student.section ?? 'Not provided')}</p>
+    `;
+}
+
+
+// ==========================================
+// LOAD RECORDS WHEN PAGE OPENS
+// ==========================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadMyRecords();
+    loadStudents();
+});
 
 </script>
 

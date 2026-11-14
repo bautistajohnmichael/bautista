@@ -1,17 +1,14 @@
 
-import sqlite3
 import os
+import sqlite3
 
-# Create database in the same folder as this file
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATABASE = os.path.join(BASE_DIR, 'students.db')
+DATABASE = os.path.join(BASE_DIR, "students.db")
 
-# Connect to database
-conn = sqlite3.connect(DATABASE)
-cursor = conn.cursor()
+connection = sqlite3.connect(DATABASE)
+cursor = connection.cursor()
 
-# Create students table
-cursor.execute('''
+cursor.execute("""
 CREATE TABLE IF NOT EXISTS students (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     student_id TEXT NOT NULL,
@@ -20,29 +17,34 @@ CREATE TABLE IF NOT EXISTS students (
     year INTEGER NOT NULL,
     section TEXT NOT NULL
 )
-''')
+""")
 
-# Clear previous sample records
+# Reset practice records
 cursor.execute("DELETE FROM students")
 
-# Five sample student records
+# Reset SQLite auto-increment counter
+cursor.execute(
+    "DELETE FROM sqlite_sequence WHERE name = 'students'"
+)
+
+# Five fictional practice records
 students = [
-    ('2026-00131', 'Alex Rivera', 'BSIT', 3, 'A'),
-    ('2026-00132', 'Sofia Garcia', 'BSIT', 2, 'B'),
-    ('2026-00133', 'Daniel Cruz', 'BSCS', 1, 'A'),
-    ('2026-00134', 'Isabella Reyes', 'BSIS', 3, 'B'),
-    ('2026-00135', 'Gabriel Santos', 'BSIT', 1, 'C')
+    ("2026-00131", "Alex Rivera", "BSIT", 3, "A"),
+    ("2026-00132", "Sofia Garcia", "BSIT", 2, "B"),
+    ("2026-00133", "Daniel Cruz", "BSCS", 1, "A"),
+    ("2026-00134", "Isabella Reyes", "BSIS", 3, "B"),
+    ("2026-00135", "Gabriel Santos", "BSIT", 1, "C")
 ]
 
-# Insert records into database
-cursor.executemany('''
-INSERT INTO students (student_id, name, program, year, section)
+cursor.executemany("""
+INSERT INTO students
+(student_id, name, program, year, section)
 VALUES (?, ?, ?, ?, ?)
-''', students)
+""", students)
 
-# Save and close database
-conn.commit()
-conn.close()
+connection.commit()
+connection.close()
 
 print("Database created successfully!")
 print("Five student records inserted successfully!")
+print("Database location:", DATABASE)
